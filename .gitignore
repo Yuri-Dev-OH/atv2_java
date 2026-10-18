@@ -1,0 +1,11 @@
+target/
+.tools/
+.idea/
+.settings/
+.classpath
+.project
+*.iml
+*.log
+.env
+base-professor/
+dados/

@@ -1,0 +1,10 @@
+services:
+  api:
+    build: .
+    ports:
+      - "127.0.0.1:8081:8081"
+    volumes:
+      - dados:/app/dados
+volumes:
+  dados:
+#https://www.youtube.com/watch?v=dQw4w9WgXcQ

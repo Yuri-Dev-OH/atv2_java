@@ -1,0 +1,87 @@
+@startuml
+title AutoBots - cadastro de clientes (RMM nível 3)
+class Cliente {
+  Long id
+  String nome
+  String nomeSocial
+  LocalDate dataNascimento
+  Instant dataCadastro
+}
+class Endereco {
+  Long id
+  String estado
+  String cidade
+  String bairro
+  String rua
+  String numero
+  String codigoPostal
+  String informacoesAdicionais
+}
+class Documento {
+  Long id
+  String tipo
+  String numero
+}
+class Telefone {
+  Long id
+  String ddd
+  String numero
+}
+Cliente "1" *-- "0..1" Endereco
+Cliente "1" *-- "0..*" Documento
+Cliente "1" *-- "0..*" Telefone
+package "HTTP" {
+  class RaizControle
+  class ClienteControle
+  class EnderecoControle
+  class DocumentoControle
+  class TelefoneControle
+}
+package "Regras e transações" {
+  class ClienteServico
+  class EnderecoServico
+  class DocumentoServico
+  class TelefoneServico
+  class ClienteSelecionador
+  class ClienteAtualizador
+  class EnderecoAtualizador
+  class DocumentoAtualizador
+  class TelefoneAtualizador
+}
+package "HATEOAS (Spring HATEOAS)" {
+  class AdicionadorLinkCliente
+  class AdicionadorLinkEndereco
+  class AdicionadorLinkDocumento
+  class AdicionadorLinkTelefone
+  class HipermidiaConfiguracao
+}
+interface ClienteRepositorio
+ClienteControle --> AdicionadorLinkCliente
+EnderecoControle --> AdicionadorLinkEndereco
+DocumentoControle --> AdicionadorLinkDocumento
+TelefoneControle --> AdicionadorLinkTelefone
+RaizControle ..> ClienteControle : link "clientes"
+ClienteControle --> ClienteServico
+EnderecoControle --> EnderecoServico
+DocumentoControle --> DocumentoServico
+TelefoneControle --> TelefoneServico
+ClienteServico --> ClienteSelecionador
+EnderecoServico --> ClienteSelecionador
+DocumentoServico --> ClienteSelecionador
+TelefoneServico --> ClienteSelecionador
+ClienteServico --> ClienteAtualizador
+EnderecoServico --> EnderecoAtualizador
+DocumentoServico --> DocumentoAtualizador
+TelefoneServico --> TelefoneAtualizador
+ClienteSelecionador --> ClienteRepositorio
+ClienteRepositorio --> Cliente
+note bottom of Cliente
+Cadastro e exclusão em cascata.
+Endereço pode ficar ausente durante o cadastro.
+Contatos não são compartilhados entre entidades Cliente.
+end note
+note right of AdicionadorLinkCliente
+Geram _links (HAL) e _templates (HAL-FORMS)
+a partir dos metodos dos controles (linkTo, methodOn, afford).
+end note
+@enduml
